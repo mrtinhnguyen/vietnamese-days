@@ -1,12 +1,12 @@
 
 <!doctype html>
-<html lang="zh-CN">
+<html lang="vi">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>实时薪资计算</title>
-  <!-- 引入中国节假日库 - 使用官方推荐的 CDN -->
-  <script src="https://cdn.jsdelivr.net/npm/chinese-days"></script>
+  <title>Tính lương thời gian thực</title>
+  <!-- Thư viện Ngày lễ Việt Nam - Sử dụng CDN chính thức -->
+  <script src="https://cdn.jsdelivr.net/npm/vietnamese-days"></script>
   <style>
     :root {
       --bg-body: #fff;
@@ -115,11 +115,11 @@
 <body>
   <div class="wrap">
     <div class="controls" id="controls">
-      <div class="row"><label data-t="salaryLabel">月薪（元）</label><input id="salary" type="number" min="0" step="100" value="5000"></div>
-      <div class="row"><label data-t="monthStartDayLabel">每月开始日期</label><input id="monthStartDay" type="number" min="1" max="31" value="1" title="设置每月薪资周期的开始日期"></div>
-      <div class="row"><label data-t="workHoursLabel">上班时间</label><input id="startHour" type="time" value="09:00"><span style="padding:0 4px;opacity:0.7">—</span><input id="endHour" type="time" value="18:00"></div>
-      <div class="row freq-setting"><label data-t="freqLabel">刷新频率（秒）</label><input id="freq" type="number" min="0.1" step="0.1" value="1"></div>
-      <button class="btn-start" id="startBtn" data-t="startBtn">开始计算</button>
+      <div class="row"><label data-t="salaryLabel">Lương tháng (₫)</label><input id="salary" type="number" min="0" step="100000" value="10000000"></div>
+      <div class="row"><label data-t="monthStartDayLabel">Ngày bắt đầu tháng</label><input id="monthStartDay" type="number" min="1" max="31" value="1" title="Thiết lập ngày bắt đầu của chu kỳ lương hàng tháng"></div>
+      <div class="row"><label data-t="workHoursLabel">Giờ làm việc</label><input id="startHour" type="time" value="08:00"><span style="padding:0 4px;opacity:0.7">—</span><input id="endHour" type="time" value="17:00"></div>
+      <div class="row freq-setting"><label data-t="freqLabel">Tần suất cập nhật (s)</label><input id="freq" type="number" min="0.1" step="0.1" value="1"></div>
+      <button class="btn-start" id="startBtn" data-t="startBtn">Bắt đầu tính</button>
     </div>
 
     <div class="display" id="display">
@@ -171,7 +171,7 @@
       },
       'en': {
         pageTitle: 'Real-time Salary Calculator',
-        salaryLabel: 'Monthly Salary',
+        salaryLabel: 'Monthly Salary ($)',
         monthStartDayLabel: 'Month Start Day',
         monthStartDayTitle: 'Set the start day of the payroll cycle',
         workHoursLabel: 'Work Hours',
@@ -186,11 +186,30 @@
         periodPrefix: 'Period: ',
         calculating: 'Calculating...',
         periodInfoTemplate: '{start} - {end} (Total {days} working days)'
+      },
+      'vi': {
+        pageTitle: 'Tính lương thời gian thực',
+        salaryLabel: 'Lương tháng (₫)',
+        monthStartDayLabel: 'Ngày bắt đầu tháng',
+        monthStartDayTitle: 'Thiết lập ngày bắt đầu của chu kỳ lương hàng tháng',
+        workHoursLabel: 'Giờ làm việc',
+        freqLabel: 'Tần suất cập nhật (s)',
+        startBtn: 'Bắt đầu tính',
+        currency: '₫',
+        workedPrefix: 'Đã làm việc: ',
+        daysUnit: ' ngày ',
+        hoursUnit: ' giờ ',
+        minutesUnit: ' phút ',
+        secondsUnit: ' giây',
+        periodPrefix: 'Chu kỳ lương: ',
+        calculating: 'Đang tính toán...',
+        periodInfoTemplate: '{start} - {end} (Tổng {days} ngày làm việc)'
       }
     };
 
     const urlParams = new URLSearchParams(window.location.search);
-    const lang = (urlParams.get('lang') === 'en') ? 'en' : 'zh-CN';
+    let lang = urlParams.get('lang') || 'vi';
+    if (!translations[lang]) lang = 'vi';
     const t = translations[lang];
 
     function applyLanguage() {
@@ -208,7 +227,7 @@
       if (monthStartInput) monthStartInput.title = t.monthStartDayTitle;
     }
 
-    // 获取薪资周期的开始和结束日期
+    // Lấy chu kỳ lương (ngày bắt đầu và ngày kết thúc)
     function getPayrollPeriod(startDay) {
       const now = new Date();
       const currentYear = now.getFullYear();
@@ -218,13 +237,13 @@
       let periodStart, periodEnd;
       
       if (currentDay >= startDay) {
-        // 当前在本月的薪资周期内
+        // Trong chu kỳ lương tháng này
         periodStart = new Date(currentYear, currentMonth - 1, startDay);
         const nextMonth = currentMonth === 12 ? 1 : currentMonth + 1;
         const nextYear = currentMonth === 12 ? currentYear + 1 : currentYear;
         periodEnd = new Date(nextYear, nextMonth - 1, startDay - 1, 23, 59, 59, 999);
       } else {
-        // 当前在上个月的薪资周期内
+        // Trong chu kỳ lương tháng trước
         const prevMonth = currentMonth === 1 ? 12 : currentMonth - 1;
         const prevYear = currentMonth === 1 ? currentYear - 1 : currentYear;
         periodStart = new Date(prevYear, prevMonth - 1, startDay);
@@ -234,23 +253,23 @@
       return { periodStart, periodEnd };
     }
 
-    // 获取指定月份的工作日数量（改进版）
+    // Lấy số ngày làm việc trong chu kỳ
     function getWorkingDaysInPeriod(periodStart, periodEnd) {
-      // 使用正确的 chinese-days 库 API
-      const { isWorkday } = window.chineseDays || {};
+      // Sử dụng API của thư viện vietnamese-days
+      const { isWorkday } = window.vietnameseDays || {};
       
       if (!isWorkday) {
-        // 回退计算：按工作日占比估算
+        // Tính toán dự phòng: ước tính theo tỷ lệ ngày làm việc
         const totalDays = Math.ceil((periodEnd - periodStart) / (24 * 60 * 60 * 1000));
-        return Math.round(totalDays * 22 / 30); // 假设30天中有22个工作日
+        return Math.round(totalDays * 22 / 30); // Giả sử có 22 ngày làm việc trong 30 ngày
       }
 
       let workingDays = 0;
       const current = new Date(periodStart);
       
       while (current <= periodEnd) {
-        // 使用 isWorkday 函数判断是否为工作日
-        const dateStr = current.toISOString().split('T')[0]; // YYYY-MM-DD 格式
+        // Sử dụng hàm isWorkday để kiểm tra ngày làm việc
+        const dateStr = current.toISOString().split('T')[0]; // Định dạng YYYY-MM-DD
         const isWork = isWorkday(dateStr);
         
         if (isWork) {
@@ -262,9 +281,9 @@
       return workingDays;
     }
 
-    // 计算已工作的时间详情
+    // Tính toán chi tiết thời gian đã làm việc
     function calculateWorkingTimeDetails(startDay, startTime, endTime) {
-      const { isWorkday } = window.chineseDays || {};
+      const { isWorkday } = window.vietnameseDays || {};
       const now = new Date();
       const { periodStart, periodEnd } = getPayrollPeriod(startDay);
       
@@ -281,29 +300,29 @@
       while (current <= now && current <= periodEnd) {
         const isToday = current.toDateString() === now.toDateString();
         
-        // 使用 chinese-days 库检查是否为工作日
+        // Sử dụng thư viện vietnamese-days để kiểm tra ngày làm việc
         const dateStr = current.toISOString().split('T')[0];
         const isWorking = isWorkday ? isWorkday(dateStr) : 
-          (current.getDay() !== 0 && current.getDay() !== 6); // 回退：排除周末
+          (current.getDay() !== 0 && current.getDay() !== 6); // Dự phòng: loại trừ cuối tuần
         
         if (isWorking) {
           const dayStart = new Date(current.getFullYear(), current.getMonth(), current.getDate(), startHour, startMinute);
           const dayEnd = new Date(current.getFullYear(), current.getMonth(), current.getDate(), endHour, endMinute);
           
           if (isToday) {
-            // 今天：只计算工作时间段内的时间
+            // Hôm nay: chỉ tính thời gian trong khung giờ làm việc
             if (now >= dayStart && now <= dayEnd) {
-              // 当前在工作时间内
+              // Đang trong giờ làm việc
               currentDayWorkedSeconds = (now - dayStart) / 1000;
               totalWorkedSeconds += currentDayWorkedSeconds;
             } else if (now > dayEnd) {
-              // 已经过了下班时间，算完整一天
+              // Đã quá giờ làm việc, tính trọn một ngày
               totalWorkedSeconds += workSecondsPerDay;
               completedWorkDays += 1;
             }
-            // 如果还没到上班时间，不加任何时间
+            // Nếu chưa đến giờ làm việc, không cộng thêm thời gian
           } else {
-            // 过去的工作日：加上完整的工作时间
+            // Các ngày làm việc đã qua: cộng trọn thời gian làm việc
             totalWorkedSeconds += workSecondsPerDay;
             completedWorkDays += 1;
           }
@@ -362,7 +381,7 @@
       document.getElementById('periodInfo').textContent = periodInfoText;
     }
 
-    // 回退计算函数（当chinese-days库不可用时）
+    // Hàm tính toán dự phòng (khi thư viện vietnamese-days không khả dụng)
     function computeTodayAmountFallback(startTime, endTime) {
       const [startHour, startMinute] = startTime.split(':').map(Number);
       const [endHour, endMinute] = endTime.split(':').map(Number);

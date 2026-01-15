@@ -2,7 +2,7 @@ import { createRequire } from 'module'
 import { DefaultTheme, defineConfig } from 'vitepress'
 
 const require = createRequire(import.meta.url)
-const pkg = require('chinese-days/package.json')
+const pkg = require('../../package.json')
 
 export const en = defineConfig({
   description: "A VitePress Site",
@@ -10,11 +10,11 @@ export const en = defineConfig({
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     nav: [
-      { text: 'Guide', link: '/en/guide/what-is-chinese-days' },
+      { text: 'Guide', link: '/en/guide/what-is-vietnamese-days' },
       { text: 'Demo', link: '/en/demo/calendar' },
       {
         text: pkg.version,
-        link: 'https://github.com/vsme/chinese-days/blob/main/CHANGELOG.md'
+        link: 'https://github.com/mrtinhnguyen/vietnamese-days/blob/main/CHANGELOG.md'
       },
     ],
 
@@ -24,7 +24,7 @@ export const en = defineConfig({
     },
 
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/vsme/chinese-days' }
+      { icon: 'github', link: 'https://github.com/mrtinhnguyen/vietnamese-days' }
     ],
 
     footer: {
@@ -40,7 +40,7 @@ function sidebarGuide(): DefaultTheme.SidebarItem[] {
       text: 'Introduction',
       collapsed: false,
       items: [
-        { text: 'What is Chinese Days', link: 'what-is-chinese-days' },
+        { text: 'What is Vietnamese Days', link: 'what-is-vietnamese-days' },
         { text: 'iCal Subscription', link: 'ical-subscription' },
         { text: 'Getting started', link: 'getting-started' },
       ]

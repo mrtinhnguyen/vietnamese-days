@@ -12,85 +12,51 @@ export interface LunarFestival {
 // 固定农历节日配置
 export const LUNAR_FESTIVAL_MAP: Record<number, Record<number, string[]>> = {
   1: {
-    // 正月
-    1: ['春节', '鸡日', '元始天尊诞辰'],
-    2: ['犬日'],
-    3: ['猪日', '小年朝'],
-    4: ['羊日', '孙天医诞辰'],
-    5: ['牛日', '破五日', '开市', '路神诞辰'],
-    6: ['马日'],
-    7: ['人日', '送火神'],
-    8: ['谷日', '阎王诞辰'],
-    9: ['天日', '玉皇诞辰'],
-    10: ['地日', '石头生日'],
-    13: ['上(试)灯日', '关公升天日'],
-    15: ['元宵节', '上元节', '正灯日', '天官诞辰'],
-    18: ['落灯日'],
-    25: ['天仓(填仓)节'],
+    // Tháng Giêng
+    1: ['Tết Nguyên đán'],
+    2: ['Tết Nguyên đán (Mùng 2)'],
+    3: ['Tết Nguyên đán (Mùng 3)'],
+    4: ['Hóa vàng'],
+    15: ['Tết Nguyên tiêu (Rằm tháng Giêng)'],
   },
   2: {
-    // 二月
-    1: ['太阳生日'],
-    2: ['春龙节', '土地公生日', '济公活佛生日'],
-    3: ['文昌帝君诞辰'],
-    12: ['百花生日(花朝节)'],
-    15: ['九天玄女诞辰', '太上老君诞辰', '精忠岳王诞辰'],
-    19: ['观音菩萨诞辰'],
-    21: ['普贤菩萨诞辰'],
+    // Tháng Hai
   },
   3: {
-    3: ['上巳节'],
-    15: ['赵公元帅诞辰', '泰山老母诞辰'],
+    // Tháng Ba
+    3: ['Tết Hàn thực'],
+    10: ['Giỗ Tổ Hùng Vương'],
   },
   4: {
-    1: ['祭雹神'],
-    4: ['文殊菩萨诞辰'],
-    8: ['浴佛节(龙华会)'],
-    12: ['蛇王诞辰'],
-    14: ['吕洞宾诞辰'],
-    18: ['华佗诞辰'],
-    28: ['药王(神农)诞辰'],
+    // Tháng Tư
+    8: ['Lễ Phật đản'],
   },
   5: {
-    5: ['端午节'],
-    13: ['雨节', '黄帝诞辰'],
+    // Tháng Năm
+    5: ['Tết Đoan ngọ'],
   },
   6: {
-    1: ['半年节'],
-    6: ['晒衣节'],
-    19: ['观音菩萨得道'],
-    24: ['雷神诞辰', '荷花生日', '关公诞辰'],
+    // Tháng Sáu
   },
   7: {
-    1: ['祭海神'],
-    7: ['乞巧节'],
-    15: ['中元(鬼)节', '地官诞辰(孟兰盆会)'],
-    18: ['西王母诞辰'],
-    20: ['棉花生日'],
-    23: ['诸葛亮诞辰'],
-    30: ['地藏菩萨诞辰'],
+    // Tháng Bảy
+    15: ['Lễ Vu Lan', 'Rằm tháng Bảy', 'Xá tội vong nhân'],
   },
   8: {
-    1: ['天医节'],
-    3: ['灶君生日'],
-    8: ['瑶池大会'],
-    15: ['中秋节'],
-    20: ['水稻生日'],
-    28: ['孔子诞辰'],
+    // Tháng Tám
+    15: ['Tết Trung thu'],
   },
   9: {
-    9: ['重阳节'],
-    19: ['观音菩萨出家'],
+    // Tháng Chín
+    9: ['Tết Trùng cửu'],
   },
   10: {
-    1: ['十月朝', '寒衣节'],
-    15: ['下元节', '水官诞辰'],
+    // Tháng Mười
+    10: ['Tết Thường tân (Tết Cơm mới)'],
   },
   12: {
-    8: ['腊八节'],
-    23: ['官家送灶'],
-    24: ['民间送灶'],
-    25: ['接玉皇'],
+    // Tháng Chạp
+    23: ['Tết Táo quân (Ông Công Ông Táo)'],
   },
 };
 
@@ -99,7 +65,7 @@ export const SPECIAL_FESTIVAL_HANDLERS: ((
   date: Dayjs,
   result: LunarFestival[]
 ) => void)[] = [
-  // 处理寒食节（清明前一日）
+  // 处理寒食节（Thanh minh trước 1 ngày - Thường trùng 3/3 nên đã có ở trên, nhưng giữ logic nếu cần）
   (current, result) => {
     const pureBrightnessDay = current.add(1, 'day');
     const pureBrightness = getSolarTermsInRange(pureBrightnessDay).find(
@@ -108,13 +74,13 @@ export const SPECIAL_FESTIVAL_HANDLERS: ((
     if (pureBrightness) {
       result.push({
         date: current.format('YYYY-MM-DD'),
-        name: '寒食节',
+        name: 'Trước Thanh minh',
         type: 'solar_term',
       });
     }
   },
 
-  // 处理除夕（农历腊月最后一日）
+  // 处理除夕 (Trừ tịch - Ngày cuối năm)
   (current, result) => {
     const lunar = getLunarDate(current);
     if (
@@ -122,7 +88,7 @@ export const SPECIAL_FESTIVAL_HANDLERS: ((
       lunar.lunarDay === monthDays(lunar.lunarYear, 12)
     ) {
       const date = current.format('YYYY-MM-DD');
-      ['除夕', '封井', '祭井神', '贴春联', '迎财神'].forEach(name => {
+      ['Trừ tịch', 'Đêm Giao thừa'].forEach(name => {
         result.push({
           date,
           name,

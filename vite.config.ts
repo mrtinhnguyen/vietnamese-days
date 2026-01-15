@@ -8,7 +8,7 @@ export default defineConfig(() => ({
     sourcemap: false,
     lib: {
       entry: './src/index.ts',
-      name: 'chineseDays',
+      name: 'vietnameseDays',
       formats: ['umd', 'es'],
       fileName: format =>
         format == 'umd' ? 'index.min.js' : `index.${format}.js`,

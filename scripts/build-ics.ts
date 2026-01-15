@@ -29,7 +29,7 @@ const getAllYears = () => {
 };
 
 const buildIcal = (
-  language: 'CN' | 'EN',
+  language: 'VI' | 'EN',
   years?: number[],
   yearSuffix?: string
 ) => {
@@ -41,19 +41,19 @@ const buildIcal = (
     : `${endYear - 2}~${endYear}`;
 
   const info =
-    language == 'CN'
+    language == 'VI'
       ? {
-          name: '中国节假日',
-          desc: `${yearRange}年中国节假日日历`,
-          location: '北京',
-          categories: '节假日',
-          holiday: '休',
-          workday: '班',
+          name: 'Ngày lễ Việt Nam',
+          desc: `Lịch ngày lễ Việt Nam năm ${yearRange}`,
+          location: 'Hà Nội',
+          categories: 'Ngày lễ',
+          holiday: 'Nghỉ',
+          workday: 'Làm',
         }
       : {
-          name: 'Chinese Public Holidays',
-          desc: `Calendar of Chinese Public Holidays for ${yearRange} Years`,
-          location: 'Beijing',
+          name: 'Vietnamese Public Holidays',
+          desc: `Calendar of Vietnamese Public Holidays for ${yearRange} Years`,
+          location: 'Hanoi',
           categories: 'Holidays',
           holiday: 'Holiday',
           workday: 'Workday',
@@ -61,8 +61,8 @@ const buildIcal = (
   // 创建一个新的日历
   const cal = ical({
     name: info.name,
-    timezone: 'Asia/Shanghai',
-    prodId: { company: 'yaavi.me', product: 'Chinese Days', language },
+    timezone: 'Asia/Ho_Chi_Minh',
+    prodId: { company: 'tonyx.dev', product: 'Vietnamese Days', language },
   });
 
   // 设置日历描述
@@ -70,15 +70,15 @@ const buildIcal = (
 
   // 添加时区信息
   cal.timezone({
-    name: 'Asia/Shanghai',
+    name: 'Asia/Ho_Chi_Minh',
     generator: tzid => `
 BEGIN:VTIMEZONE
 TZID:${tzid}
 X-LIC-LOCATION:${tzid}
 BEGIN:STANDARD
-TZOFFSETFROM:+0800
-TZOFFSETTO:+0800
-TZNAME:CST
+TZOFFSETFROM:+0700
+TZOFFSETTO:+0700
+TZNAME:ICT
 DTSTART:19700101T000000
 END:STANDARD
 END:VTIMEZONE`,
@@ -139,10 +139,10 @@ END:VTIMEZONE`,
 
     for (const [date, info] of Object.entries(days)) {
       if (years.includes(Number(date.slice(0, 4)))) {
-        const [name, chineseName] = info.split(',');
+        const [name, vietnameseName] = info.split(',');
         if (!mergedHolidays[name]) {
           mergedHolidays[name] = {
-            chineseName,
+            chineseName: vietnameseName,
             dates: [],
           };
         }
@@ -173,7 +173,7 @@ END:VTIMEZONE`,
           calAddDays(
             startDate,
             endDate,
-            language == 'CN' ? chineseName : name,
+            language == 'VI' ? chineseName : name,
             mark
           );
 
@@ -187,7 +187,7 @@ END:VTIMEZONE`,
       calAddDays(
         startDate,
         endDate,
-        language == 'CN' ? chineseName : name,
+        language == 'VI' ? chineseName : name,
         mark
       );
     }
@@ -199,8 +199,8 @@ END:VTIMEZONE`,
   // 生成文件名
   const fileName =
     yearSuffix && years && years.length > 0
-      ? `./dist/years/${years[0]}${language == 'CN' ? '' : '.en'}.ics`
-      : `./dist/holidays${language == 'CN' ? '' : '.en'}.ics`;
+      ? `./dist/years/${years[0]}${language == 'VI' ? '' : '.en'}.ics`
+      : `./dist/holidays${language == 'VI' ? '' : '.en'}.ics`;
 
   // 将日历保存到文件
   fs.writeFile(fileName, cal.toString(), 'utf8', err => {
@@ -210,13 +210,13 @@ END:VTIMEZONE`,
 };
 
 // 生成总的 ICS 文件（保持原有功能）
-buildIcal('CN');
+buildIcal('VI');
 buildIcal('EN');
 
 // 生成按年份分组的 ICS 文件
 const allYears = getAllYears();
 allYears.forEach(year => {
-  buildIcal('CN', [year], `${year}`);
+  buildIcal('VI', [year], `${year}`);
   buildIcal('EN', [year], `${year}`);
 });
 

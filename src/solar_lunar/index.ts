@@ -43,7 +43,7 @@ const yearLeapDays = (y: number): number =>
  * @returns 天干地支表示
  */
 const cyclicalm = (num: number): string =>
-  NUMBER_1[num % 10] + NUMBER_2[num % 12];
+  `${NUMBER_1[num % 10]} ${NUMBER_2[num % 12]}`;
 
 /**
  * 获取指定年月的阴历天数
@@ -62,30 +62,32 @@ export const monthDays = (y: number, m: number): number =>
 const getYearZodiac = (y: number): string => ZODIACS[(y - 4) % 12];
 
 /**
- * 获取指定日期的农历表示
- * @param day 日期
- * @returns 农历表示
+ * Lấy cách gọi ngày âm lịch bằng tiếng Việt
+ * @param day Ngày trong tháng
+ * @returns Cách gọi ngày
  */
 const getDateCN = (day: number): string => {
-  const prefixes = ['初', '十', '廿', '三十'];
+  if (day === 10) return 'Mùng Mười';
+  if (day === 20) return 'Hai Mươi';
+  if (day === 30) return 'Ba Mươi';
 
-  if (day === 10) return '初十';
-  if (day === 20) return '二十';
-  if (day === 30) return '三十';
+  const tens = Math.floor(day / 10);
+  const units = day % 10;
 
-  const tensPlace = Math.floor(day / 10);
-  const unitsPlace = day % 10;
+  if (tens === 0) return `Mùng ${CHINESE_NUMBER[units]}`;
+  if (tens === 1) return `Mười ${CHINESE_NUMBER[units]}`;
+  if (tens === 2) return `Hai Mươi ${CHINESE_NUMBER[units]}`;
 
-  return prefixes[tensPlace] + CHINESE_NUMBER[unitsPlace];
+  return '';
 };
 
 /**
- * 获取指定农历年份的天干地支表示
- * @param lunarYear 农历年份
- * @returns 天干地支表示
+ * Lấy tên năm âm lịch (Can Chi)
+ * @param lunarYear Năm âm lịch
+ * @returns Tên năm Can Chi
  */
 const getLunarYearText = (lunarYear: number): string => {
-  return `${NUMBER_1[(lunarYear - 4) % 10]}${NUMBER_2[(lunarYear - 4) % 12]}年`;
+  return `${NUMBER_1[(lunarYear - 4) % 10]} ${NUMBER_2[(lunarYear - 4) % 12]}`;
 };
 
 /**
@@ -104,23 +106,23 @@ export const getLunarYears = (startYear: number, endYear: number) => {
         .toString()
         .split('')
         .map(i => CHINESE_NUMBER[Number(i)])
-        .join(''),
+        .join(' '),
     });
   }
   return years;
 };
 
 /**
- * 获取指定阳历年份的闰月
- * @param year 年份
- * @returns 农历闰月月份
+ * Lấy thông tin tháng nhuận
+ * @param year Năm
+ * @returns Thông tin tháng nhuận
  */
 export const getYearLeapMonth = (year: number) => {
   const leap = yearLeapMonth(year);
   return {
     year,
     leapMonth: leap || undefined,
-    leapMonthCN: leap ? `闰${NUMBER_MONTH[leap - 1]}月` : undefined,
+    leapMonthCN: leap ? `Nhuận ${NUMBER_MONTH[leap - 1]}` : undefined,
     days: leap ? ((LUNAR_INFO[year - 1900] & 0x10000) !== 0 ? 30 : 29) : 0,
   };
 };
@@ -196,16 +198,16 @@ export const getLunarDate = (date: ConfigType): LunarDateDetail => {
     lunarDay: lunarDate[2], // 农历日期
     isLeap: Boolean(lunarDate[6]), // 是否闰月
     zodiac: getYearZodiac(lunarDate[0]), // 生肖
-    yearCyl: cyclicalm(lunarDate[3]), // 年柱
-    monCyl: cyclicalm(lunarDate[4]), // 月柱
-    dayCyl: cyclicalm(lunarDate[5]), // 日柱
+    yearCyl: cyclicalm(lunarDate[3]), // Năm Can Chi
+    monCyl: cyclicalm(lunarDate[4]), // Tháng Can Chi
+    dayCyl: cyclicalm(lunarDate[5]), // Ngày Can Chi
     lunarYearCN: `${lunarDate[0]
       .toString()
       .split('')
       .map(i => CHINESE_NUMBER[Number(i)])
-      .join('')}`, // 农历年份中文表示
-    lunarMonCN: `${NUMBER_MONTH[lunarDate[1]]}月`, // 农历月份中文表示
-    lunarDayCN: getDateCN(lunarDate[2]), // 农历日期中文表示
+      .join(' ')}`, // Năm âm lịch hiển thị số
+    lunarMonCN: `Tháng ${NUMBER_MONTH[lunarDate[1]]}`, // Tháng âm lịch hiển thị tên
+    lunarDayCN: getDateCN(lunarDate[2]), // Ngày âm lịch hiển thị tên
   };
 };
 

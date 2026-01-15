@@ -3,6 +3,8 @@
 When dealing with leap months in the Lunar Calendar, a single Lunar date may correspond to two Gregorian dates. In such cases, the function returns an object to handle both dates.
 
 ```js
+import { getSolarDateFromLunar } from "vietnamese-days";
+
 console.log(getSolarDateFromLunar('2001-03-05'));
 // {date: '2001-03-29', leapMonthDate: undefined}
 

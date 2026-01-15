@@ -1,16 +1,16 @@
 <script lang="ts" setup>
 import { computed, ref } from 'vue'
-import chineseDays from "chinese-days"
+import vietnameseDays from "vietnamese-days"
 
-const { getDayDetail, getLunarDate, getSolarTermsInRange, isInLieu } = chineseDays
+const { getDayDetail, getLunarDate, getSolarTermsInRange, isInLieu } = vietnameseDays
 
 const props = withDefaults(
   defineProps<{
-    lang: 'zh' | 'en'
+    lang: 'zh' | 'en' | 'vi'
     startOfWeek?: 1 | 2 | 3 | 4 | 5 | 6 | 0
   }>(),
   {
-    lang: 'zh',
+    lang: 'vi',
     startOfWeek: 1,
   },
 )
@@ -21,7 +21,9 @@ const currentYear = ref(currentDate.value.getFullYear())
 const daysOfWeek = computed(() =>
   props.lang === 'zh'
     ? ['日', '一', '二', '三', '四', '五', '六']
-    : ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+    : props.lang === 'vi'
+      ? ['CN', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7']
+      : ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
 )
 const monthNames = [
   'January',
@@ -160,6 +162,20 @@ const daysInfo = computed(() => daysInMonth.value.map((date: Date) => getDayInfo
         </select>
         月
       </h2>
+      <h2 v-else-if="lang === 'vi'">
+        Tháng
+        <select v-model="currentMonth">
+          <option v-for="(month, index) in 12" :key="index" :value="index">
+            {{ month < 10 ? `0${month}` : month }}
+          </option>
+        </select>
+        năm
+        <select v-model="currentYear" style="width: 130px;">
+          <option v-for="(y, index) in 201" :key="index" :value="1900 + index">
+            {{ 1900 + index }}
+          </option>
+        </select>
+      </h2>
       <h2 v-else>        
         <select v-model="currentMonth" style="width: 160px;">
           <option v-for="(month, index) in 12" :key="index" :value="index">
@@ -208,9 +224,9 @@ const daysInfo = computed(() => daysInMonth.value.map((date: Date) => getDayInfo
         }"
         @click="selectDate(day)"
       >
-        <span v-if="day.isToday" class="today-dot">{{ lang === 'en' ? 'Today' : '今' }}</span>
+        <span v-if="day.isToday" class="today-dot">{{ lang === 'en' ? 'Today' : lang === 'vi' ? 'Nay' : '今' }}</span>
         <span v-if="day.holidayName" class="holiday-dot">{{
-          day.work ? '班' : day.isInLieu ? '调' : '休'
+          lang === 'vi' ? (day.work ? 'Làm' : (day.isInLieu ? 'Bù' : 'Nghỉ')) : (day.work ? '班' : (day.isInLieu ? '调' : '休'))
         }}</span>
         <span class="day">{{ day.date.getDate() }}</span>
         <span class="desc">{{
@@ -223,27 +239,36 @@ const daysInfo = computed(() => daysInMonth.value.map((date: Date) => getDayInfo
   <div class="calendar-day-info">
     <div class="left">
       <p>
-        {{ selectedDate.lunarYearCN }}
-        {{ selectedDate.lunarMonCN }}{{ selectedDate.lunarDayCN }}
+        Ngày {{ selectedDate.lunarDay }}/{{ selectedDate.lunarMon }}{{ selectedDate.isLeap ? ' (Nhuận)' : '' }}/{{ selectedDate.lunarYear }} (Âm lịch)
       </p>
       <p>
-        {{ selectedDate.yearCyl }}{{ selectedDate.zodiac }}年 {{ selectedDate.monCyl }}月
-        {{ selectedDate.dayCyl }}日
+        {{ selectedDate.lunarDayCN }} {{ selectedDate.lunarMonCN }}, năm {{ selectedDate.yearCyl }} ({{ selectedDate.zodiac }})
+      </p>
+      <p style="font-size: 14px; opacity: 0.8;">
+        Ngày {{ selectedDate.dayCyl }}, Tháng {{ selectedDate.monCyl }}
       </p>
     </div>
     <div class="right">
       <p>
-        {{ selectedDate.isToday ? '今天是' : '此日是' }}
-        <span>{{ selectedDate.solarTerm?.name }}</span> 节气的第
-        <span>{{ selectedDate.solarTerm?.index }}</span> 天。
+        {{ lang === 'vi' ? (selectedDate.isToday ? 'Hôm nay là ngày thứ' : 'Ngày này là ngày thứ') : (selectedDate.isToday ? '今天是' : '此日是') }}
+        <span>{{ selectedDate.solarTerm?.index }}</span> {{ lang === 'vi' ? 'của tiết khí' : '节气的第' }}
+        <span>{{ selectedDate.solarTerm?.name }}</span>{{ lang === 'vi' ? '.' : '天。' }}
       </p>
       <p>
         {{
-          selectedDate.work
-            ? '又是需要工作的一天！😥'
-            : selectedDate.isInLieu
-              ? '虽然调休，但要补班还回来的！🤬'
-              : '休息啦~😃'
+          lang === 'vi' ? (
+            selectedDate.work
+              ? 'Lại là một ngày làm việc! 😥'
+              : selectedDate.isInLieu
+                ? 'Mặc dù là ngày nghỉ bù, nhưng sau đó phải đi làm bù lại! 🤬'
+                : 'Nghỉ ngơi thôi~ 😃'
+          ) : (
+            selectedDate.work
+              ? '又是需要工作的一天！😥'
+              : selectedDate.isInLieu
+                ? '虽然调休，但要补班还回来的！🤬'
+                : '休息啦~😃'
+          )
         }}
       </p>
     </div>

@@ -1,17 +1,17 @@
 import { defineConfig } from 'vitepress'
 import { en } from './en'
-import { zh } from './zh'
+import { vi } from './vi'
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
-  title: "Chinese Days",
+  title: "Vietnamese Days",
 
   head: [
     ['link', { rel: 'icon', type: 'image/png', href: '/icon.png' }],
   ],
 
   rewrites: {
-    'zh/:rest*': ':rest*'
+    'vi/:rest*': ':rest*'
   },
 
   themeConfig: {
@@ -22,7 +22,7 @@ export default defineConfig({
   },
 
   locales: {
-    root: { label: '简体中文', ...zh },
+    root: { label: 'Tiếng Việt', ...vi },
     en: { label: 'English', ...en },
   },
 })

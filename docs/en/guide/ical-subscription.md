@@ -6,12 +6,12 @@ The subscribed calendar includes holidays and adjusted working days for the upco
 
 ### English Subscription URL: 
 ```
-https://cdn.jsdelivr.net/npm/chinese-days/dist/holidays.en.ics
+https://cdn.jsdelivr.net/npm/vietnamese-days/dist/holidays.en.ics
 ```
 
-### Chinese Subscription URL:
+### Vietnamese Subscription URL:
 ```
-https://cdn.jsdelivr.net/npm/chinese-days/dist/holidays.ics
+https://cdn.jsdelivr.net/npm/vietnamese-days/dist/holidays.ics
 ```
 
 ## Specify Historical Years
@@ -19,17 +19,17 @@ https://cdn.jsdelivr.net/npm/chinese-days/dist/holidays.ics
 If you need subscription URLs for historical years, you can use the following links, supporting years from 2004 onward.
 
 ```
-https://cdn.jsdelivr.net/npm/chinese-days/dist/years/{year}.en.ics
+https://cdn.jsdelivr.net/npm/vietnamese-days/dist/years/{year}.en.ics
 
-<!-- 2025 English subscription URL -->
-https://cdn.jsdelivr.net/npm/chinese-days/dist/years/2025.en.ics
+<!-- 2026 English subscription URL -->
+https://cdn.jsdelivr.net/npm/vietnamese-days/dist/years/2026.en.ics
 ```
 
-Chinese Subscription URL:
+Vietnamese Subscription URL:
 
 ```
-https://cdn.jsdelivr.net/npm/chinese-days/dist/years/{year}.ics
+https://cdn.jsdelivr.net/npm/vietnamese-days/dist/years/{year}.ics
 
-<!-- 2025 Chinese subscription URL -->
-https://cdn.jsdelivr.net/npm/chinese-days/dist/years/2025.ics
+<!-- 2026 Vietnamese subscription URL -->
+https://cdn.jsdelivr.net/npm/vietnamese-days/dist/years/2026.ics
 ```

@@ -8,9 +8,9 @@ fs.mkdirSync('./dist/years', { recursive: true });
 // 生成总数据
 const all = generate();
 
-// 保存到 ./dist/chinese-days.json 文件（总文件）
-fs.writeFileSync('./dist/chinese-days.json', JSON.stringify(all));
-console.log('The JSON file has been saved to ./dist/chinese-days.json!');
+// 保存到 ./dist/vietnamese-days.json 文件（总文件）
+fs.writeFileSync('./dist/vietnamese-days.json', JSON.stringify(all));
+console.log('The JSON file has been saved to ./dist/vietnamese-days.json!');
 
 // 提取包含的年份（按降序）
 const getYearsFromData = (...maps: Array<Record<string, string>>): number[] => {

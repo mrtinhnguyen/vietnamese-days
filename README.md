@@ -1,53 +1,51 @@
-# 中国节假日
+# Vietnamese Days (Ngày lễ Việt Nam)
 
-[![NPM Version](https://img.shields.io/npm/v/chinese-days)](https://www.npmjs.com/package/chinese-days)
-[![GitHub License](https://img.shields.io/github/license/vsme/chinese-days)](https://github.com/vsme/chinese-days/blob/main/LICENSE)
-[![README](https://img.shields.io/badge/README-English-brightgreen.svg)](https://github.com/vsme/chinese-days/blob/main/README.en.md)
+[![NPM Version](https://img.shields.io/npm/v/vietnamese-days)](https://www.npmjs.com/package/vietnamese-days)
+[![GitHub License](https://img.shields.io/github/license/mrtinhnguyen/vietnamese-days)](https://github.com/mrtinhnguyen/vietnamese-days/blob/main/LICENSE)
+[![README](https://img.shields.io/badge/README-English-brightgreen.svg)](https://github.com/mrtinhnguyen/vietnamese-days/blob/main/README.en.md)
 
-本项目提供了一系列用于查询中国节假日、调休日、工作日、24节气、以及农历阳历互转的函数，提供 `JSON` 文件，此外还支持 `iCal` 文件订阅节假日，可供 Google Calendar、Apple Calendar、Microsoft Outlook 等客户端订阅。
+Dự án này cung cấp một loạt các hàm dùng để tra cứu ngày lễ Việt Nam, ngày nghỉ bù, ngày làm việc, 24 tiết khí, cũng như chuyển đổi giữa âm lịch và dương lịch. Ngoài ra, nó còn cung cấp file `JSON` và hỗ trợ đăng ký ngày lễ qua file `iCal`, có thể sử dụng cho các ứng dụng như Google Calendar, Apple Calendar, Microsoft Outlook, v.v.
 
-## 自动化
+## Tự động hóa
 
-已集成 AI 自动更新节假日数据，节假日变化时会自动 PR、并发送邮件提醒审核。
+Đã tích hợp AI để tự động cập nhật dữ liệu ngày lễ. Khi có thay đổi về ngày lễ, hệ thống sẽ tự động tạo PR và gửi email nhắc nhở kiểm duyệt.
 
-参考PR：[#31 自动更新 2025 年假期配置](https://github.com/vsme/chinese-days/pull/31)
+## Tài liệu
 
-## 文档
+Để xem tài liệu chi tiết, vui lòng truy cập [vietnamese-days.tonyx.dev](https://vietnamese-days.tonyx.dev/).
 
-查看文档, 请访问 [chinese-days.yaavi.me](https://chinese-days.yaavi.me/).
+`Action` được thực thi hàng ngày để tự động lấy dữ liệu. Thông tin cập nhật theo các quy định chính thức của Chính phủ Việt Nam.
 
-每日会执行 `Action` 自动抓取数据，节假日变化时发送邮件提醒，信息会跟随国务院发布进行更新。
+- **Ngày lễ**: Hỗ trợ từ năm 2004 đến 2026.
+- **24 Tiết khí**: Hỗ trợ từ năm 1900 đến 2100.
+- **Âm lịch**: Hỗ trợ từ năm 1900 đến 2100.
 
-- **节假日**：支持 2004年 至 2026年，包括 2020年 的春节延长
-- **24节气**：支持 1900年 至 2100年。
-- **农历日**：支持 1900年 至 2100年。
+## Ngôn ngữ khác
 
-## 非 `JS` 语言
+Nếu bạn không sử dụng `JS` hoặc `TS`, dự án cung cấp file `JSON` về ngày lễ Việt Nam. Bạn có thể trích dẫn trực tiếp qua liên kết [vietnamese-days.json](https://cdn.jsdelivr.net/npm/vietnamese-days/dist/vietnamese-days.json). Nếu cần file `JSON` cho từng năm riêng biệt, bạn cũng có thể sử dụng liên kết [years/2026.json](https://cdn.jsdelivr.net/npm/vietnamese-days/dist/years/2026.json), hỗ trợ từ năm 2004 trở đi.
 
-如果你不使用 `JS` 或 `TS` 开发项目，本项目提供了中国节假日的 `JSON` 文件，通过链接 [chinese-days.json](https://cdn.jsdelivr.net/npm/chinese-days/dist/chinese-days.json) 可以直接引用；如果需要按年份单独的 `JSON` 文件，也可以通过链接 [years/2025.json](https://cdn.jsdelivr.net/npm/chinese-days/dist/years/2025.json) 直接引用，支持 2004 及之后的年份。
+Ví dụ sử dụng trong `Java`, bạn có thể tham khảo [Warnier-zhang/java-chinese-days](https://github.com/Warnier-zhang/java-chinese-days) (chỉ dành cho tra cứu ngày lễ và ngày làm việc).
 
-比如在 `Java` 中使用，可以参考 [Warnier-zhang/java-chinese-days](https://github.com/Warnier-zhang/java-chinese-days)，仅用于查询中国节假日、调休日、工作日；
+## Đăng ký lịch (iCal)
 
-## 日历订阅
+Trong các ứng dụng như Google Calendar, Apple Calendar, Microsoft Outlook, bạn có thể thiết lập địa chỉ đăng ký: [https://cdn.jsdelivr.net/npm/vietnamese-days/dist/holidays.ics](https://cdn.jsdelivr.net/npm/vietnamese-days/dist/holidays.ics) để nhận thông tin lịch.
 
-在 Google Calendar、Apple Calendar、Microsoft Outlook 等客户端中，可以设置订阅地址：[https://cdn.jsdelivr.net/npm/chinese-days/dist/holidays.ics](https://cdn.jsdelivr.net/npm/chinese-days/dist/holidays.ics) 来获取日历订阅。
+Bản tiếng Anh: [https://cdn.jsdelivr.net/npm/vietnamese-days/dist/holidays.en.ics](https://cdn.jsdelivr.net/npm/vietnamese-days/dist/holidays.en.ics)
 
-For English: [https://cdn.jsdelivr.net/npm/chinese-days/dist/holidays.en.ics](https://cdn.jsdelivr.net/npm/chinese-days/dist/holidays.en.ics)
+Lịch đăng ký bao gồm các ngày lễ và ngày nghỉ bù trong 3 năm gần nhất.
 
-订阅的日历包含近三年的节假日和调休日。
+Nếu cần file `ics` cho từng năm riêng biệt, bạn có thể sử dụng liên kết [https://cdn.jsdelivr.net/npm/vietnamese-days/dist/years/2026.ics](https://cdn.jsdelivr.net/npm/vietnamese-days/dist/years/2026.ics), bản tiếng Anh là [https://cdn.jsdelivr.net/npm/vietnamese-days/dist/years/2026.en.ics](https://cdn.jsdelivr.net/npm/vietnamese-days/dist/years/2026.en.ics), hỗ trợ từ năm 2004 trở đi.
 
-如果需要按年份单独的 `ics` 文件，也可以通过链接 [https://cdn.jsdelivr.net/npm/chinese-days/dist/years/2025.ics](https://cdn.jsdelivr.net/npm/chinese-days/dist/years/2025.ics) 直接引用，英文版本为 [https://cdn.jsdelivr.net/npm/chinese-days/dist/years/2025.en.ics](https://cdn.jsdelivr.net/npm/chinese-days/dist/years/2025.en.ics)，支持 2004 及之后的年份。
+## Hướng dẫn đóng góp
 
-## 贡献代码
+1. Fork + Clone dự án về máy của bạn;
+2. Ngày lễ: Chỉnh sửa tại [Định nghĩa ngày lễ](https://github.com/mrtinhnguyen/vietnamese-days/blob/main/src/holidays/generate.ts);
+3. Định nghĩa Âm lịch: Chỉnh sửa tại [Hằng số Âm lịch](https://github.com/mrtinhnguyen/vietnamese-days/blob/main/src/solar_lunar/constants.ts);
+4. Các sửa đổi khác...;
+5. Tạo Pull Request (PR).
 
-1. Fork + Clone 项目到本地；
-2. 节假日: 修改 [节假日定义](https://github.com/vsme/chinese-days/blob/main/src/holidays/generate.ts)；
-3. 农历定义: 修改 [农历定义](https://github.com/vsme/chinese-days/blob/main/src/solar_lunar/constants.ts)；
-4. 其他修改...；
-5. 提交PR。
+## Lời cảm ơn
 
-## 致谢
-
-1. 农历数据来自于 [Bigkoo/Android-PickerView](https://github.com/Bigkoo/Android-PickerView) 项目。
-2. 中国节假日数据生成参考了 `Python` 版本的 [LKI/chinese-calendar](https://github.com/LKI/chinese-calendar) 项目。
-3. 感谢[阮一峰大佬的推荐](https://github.com/ruanyf/weekly/blob/master/docs/issue-372.md#%E5%B7%A5%E5%85%B7)。
+1. Dữ liệu Âm lịch dựa trên dự án [Bigkoo/Android-PickerView](https://github.com/Bigkoo/Android-PickerView).
+2. Tham khảo cách tạo dữ liệu ngày lễ từ dự án `Python` [LKI/chinese-calendar](https://github.com/LKI/chinese-calendar).
+3. Việt hóa và cập nhật dữ liệu ngày lễ Việt Nam bởi [TonyX.Dev](https://github.com/mrtinhnguyen).

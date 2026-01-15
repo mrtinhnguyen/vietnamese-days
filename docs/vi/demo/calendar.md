@@ -2,4 +2,4 @@
   import Calendar from '../../components/calendar-comp.vue'
 </script>
 
-<Calendar lang="zh" />
+<Calendar lang="vi" />

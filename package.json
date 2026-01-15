@@ -1,14 +1,14 @@
 {
-  "name": "chinese-days",
+  "name": "vietnamese-days",
   "version": "1.5.4",
-  "description": "中国节假日、调休日、工作日、24节气查询，农历阳历互转，支持 TS、CommonJS、UMD 模块化使用，提供 ics 日历格式，可供 Google Calendar、Apple Calendar、Microsoft Outlook 等客户端订阅。",
+  "description": "Ngày lễ Việt Nam, ngày nghỉ bù, ngày làm việc, âm lịch dương lịch, hỗ trợ TS, CommonJS, UMD, định dạng ics cho Google Calendar, Apple Calendar, Microsoft Outlook...",
   "main": "dist/index.min.js",
   "module": "dist/index.es.js",
   "types": "dist/index.d.ts",
   "type": "commonjs",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/vsme/chinese-days.git"
+    "url": "git+https://github.com/mrtinhnguyen/vietnamese-days.git"
   },
   "files": [
     "dist/*",
@@ -30,21 +30,17 @@
     "format:lint": "npm run format && npm run lint"
   },
   "keywords": [
-    "中国日期",
-    "节假日",
-    "工作日",
-    "调休",
-    "24节气",
-    "农历",
-    "阴历",
-    "阳历",
-    "日历",
-    "订阅"
+    "vietnamese-date",
+    "holiday",
+    "workday",
+    "rest day",
+    "24 solar terms",
+    "lunar calendar"
   ],
-  "author": "Yaavi",
+  "author": "Tinh Nguyen",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/vsme/chinese-days/issues"
+    "url": "https://github.com/mrtinhnguyen/vietnamese-days/issues"
   },
   "devDependencies": {
     "@types/jest": "^29.5.12",

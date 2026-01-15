@@ -1,16 +1,13 @@
 import dayjs from '../utils/dayjs';
 
 export enum Holiday {
-  NY = "New Year's Day,元旦",
-  S = 'Spring Festival,春节',
-  T = 'Tomb-sweeping Day,清明',
-  L = 'Labour Day,劳动节',
-  D = 'Dragon Boat Festival,端午',
-  N = 'National Day,国庆节',
-  M = 'Mid-autumn Festival,中秋',
-
-  /** special holidays */
-  A = 'Anti-Fascist 70th Day,中国人民抗日战争暨世界反法西斯战争胜利70周年纪念日',
+  NY = "New Year's Day,Tết Dương lịch",
+  S = 'Tet Holiday,Tết Nguyên đán',
+  H = 'Hung Kings Festival,Giỗ Tổ Hùng Vương',
+  R = 'Reunification Day,Ngày Giải phóng miền Nam',
+  L = 'Labour Day,Ngày Quốc tế Lao động',
+  I = 'Independence Day,Ngày Quốc khánh',
+  V = 'Vietnam Culture Day,Ngày Văn hóa Việt Nam',
 }
 
 interface DayDetails {
@@ -27,31 +24,24 @@ enum DayType {
   InLieu = 3,
 }
 
-/** 国务院规定的天数，1999-2025的变化 */
+/** Vietnam Labor Code holiday rules */
 const holidayDays: Record<number, Partial<Record<Holiday, number>>> = {
-  // 1999 元旦 1 天、春节、劳动节、国庆节放假 3天
-  1999: {
+  // Before 2021: Independence Day was 1 day
+  2000: {
     [Holiday.NY]: 1,
-    [Holiday.S]: 3,
-    [Holiday.L]: 3,
-    [Holiday.N]: 3,
-  },
-  // 2008 劳动节改为 1 天，增加清明、端午、中秋各 1 天
-  2008: {
-    [Holiday.T]: 1,
+    [Holiday.S]: 5,
+    [Holiday.H]: 1,
+    [Holiday.R]: 1,
     [Holiday.L]: 1,
-    [Holiday.D]: 1,
-    [Holiday.M]: 1,
+    [Holiday.I]: 1,
   },
-  // 2014 春节剔除除夕，改为初一、二、三，依旧 3 天
-  // 2015 增加 中国人民抗日战争暨世界反法西斯战争胜利70周年纪念日 1 天
-  2015: {
-    [Holiday.A]: 1,
+  // From 2021: Independence Day is 2 days
+  2021: {
+    [Holiday.I]: 2,
   },
-  // 2025 春节和劳动节 各增加 1 天
-  2025: {
-    [Holiday.S]: 4,
-    [Holiday.L]: 2,
+  // From 2026: Vietnam Culture Day is 1 day
+  2026: {
+    [Holiday.V]: 1,
   },
 };
 
@@ -67,16 +57,15 @@ class Arrangement {
     return this;
   }
 
-  /** 查询某年 节假日天数 */
+  /** Get holiday days for a specific year and holiday */
   getHolidayDays(year: number, holiday: Holiday): number {
     let lastDefinedDays = 0;
 
-    // 遍历规则，查找适用于该年份的节日天数
     for (const [ruleYear, holidays] of Object.entries(holidayDays)) {
       const ruleYearNum = parseInt(ruleYear);
       if (ruleYearNum > year) break;
       if (holidays[holiday] !== undefined) {
-        lastDefinedDays = holidays[holiday];
+        lastDefinedDays = holidays[holiday]!;
       }
     }
 
@@ -103,11 +92,11 @@ class Arrangement {
     const date = dayjs(`${this.dayDetails.year}-${month}-${day}`).format(
       'YYYY-MM-DD'
     );
-    const holidayDays = this.getHolidayDays(
+    const holidayDaysCount = this.getHolidayDays(
       this.dayDetails.year,
       this.dayDetails.holiday
     );
-    const holidayDescription = `${this.dayDetails.holiday},${holidayDays}`;
+    const holidayDescription = `${this.dayDetails.holiday},${holidayDaysCount}`;
 
     if (dayType === DayType.Holiday) {
       this.holidays[date] = holidayDescription;
@@ -136,11 +125,11 @@ class Arrangement {
       throw new Error('end date should be after start date');
     }
 
-    const holidayDays = this.getHolidayDays(
+    const holidayDaysCount = this.getHolidayDays(
       this.dayDetails.year,
       this.dayDetails.holiday
     );
-    const holidayDescription = `${this.dayDetails.holiday},${holidayDays}`;
+    const holidayDescription = `${this.dayDetails.holiday},${holidayDaysCount}`;
 
     const diffDays = endDate.diff(startDate, 'day');
     for (let i = 1; i <= diffDays; i++) {
@@ -169,38 +158,33 @@ class Arrangement {
     return this.save(month, day, DayType.InLieu);
   }
 
-  /** New Year's Day 元旦 */
+  /** Tết Dương lịch */
   ny() {
     return this.mark(Holiday.NY);
   }
-  /** Spring Festival 春节 */
+  /** Tết Nguyên đán */
   s() {
     return this.mark(Holiday.S);
   }
-  /** Tomb-sweeping Day 清明 */
-  t() {
-    return this.mark(Holiday.T);
+  /** Giỗ Tổ Hùng Vương */
+  h() {
+    return this.mark(Holiday.H);
   }
-
-  /** Labour Day 五一 */
+  /** Ngày Giải phóng miền Nam */
+  r_() {
+    return this.mark(Holiday.R);
+  }
+  /** Ngày Quốc tế Lao động */
   l() {
     return this.mark(Holiday.L);
   }
-  /** Dragon Boat Festival 端午 */
-  d() {
-    return this.mark(Holiday.D);
+  /** Ngày Quốc khánh */
+  i_() {
+    return this.mark(Holiday.I);
   }
-  /** National Day 国庆节 */
-  n() {
-    return this.mark(Holiday.N);
-  }
-  /** Mid-autumn Festival 中秋 */
-  m() {
-    return this.mark(Holiday.M);
-  }
-  /** Anti-Fascist 70th Day 中国人民抗日战争暨世界反法西斯战争胜利70周年纪念日 */
-  a() {
-    return this.mark(Holiday.A);
+  /** Ngày Văn hóa Việt Nam */
+  v() {
+    return this.mark(Holiday.V);
   }
 }
 
